@@ -7,7 +7,7 @@ const unsigned char letter_frequency[26] = {
     'm', 'f', 'y', 'w', 'g', 'p', 'b', 'v', 'k', 'x', 'q', 'j', 'z'
 };
 
-void text_letter_freq(const unsigned char *text, size_t textlen,
+void letter_freq(const unsigned char *text, size_t textlen,
         double *freqtab, size_t tablen)
 {
 
@@ -23,7 +23,16 @@ void text_letter_freq(const unsigned char *text, size_t textlen,
     }
 }
 
-void insert_sort_ip(double *tab, size_t len, unsigned char *ref)
+void letter_count(const unsigned char *text, size_t textlen,
+        int *counttab, size_t tablen)
+{
+    memset(counttab, 0, sizeof(int)*tablen);
+
+    for (size_t i = 0; i < textlen; i++)
+        counttab[(size_t)text[i]]++;
+}
+
+void insert_sort_ip_double(double *tab, size_t len, unsigned char *ref)
 {
     double key;
     unsigned char refkey;
@@ -41,39 +50,31 @@ void insert_sort_ip(double *tab, size_t len, unsigned char *ref)
     }
 }
 
-void key_gen(double *freqtab, size_t tablen, unsigned char *inbuf,
-            size_t n)
+void insert_sort_ip_int(int *tab, size_t len, unsigned char *ref)
 {
-    unsigned char tabref[tablen];
-    unsigned char outbuf[BUF_SIZE];
-    for (size_t i = 0; i < tablen; i++) tabref[i] = i;
+    int key;
+    unsigned char refkey;
+    size_t i, j;
 
-    insert_sort_ip(freqtab, tablen, tabref);
+    for ( i = 1; i < len; i++) {
+        key = tab[i]; refkey = ref[i]; j = i - 1;
 
-    unsigned char key;
-
-    printf("%u\n", inbuf[0]);
-
-    for (size_t i = 0; i < 6; i++) {
-        key = tabref[0] ^ letter_frequency[i];
-        printf("%u: ", key);
-        for ( size_t k = 0; k < n; k++) {
-            outbuf[k] = inbuf[k] ^ key;
-            if (!isprint(outbuf[k])) break;
+        while ( j >= 0 && tab[j] < key) {
+            tab[j + 1] = tab[j];
+            ref[j + 1] = ref[j];
+            j--;
         }
-        printf("%s\n", outbuf);
+        tab[j+1] = key; ref[j+1] = refkey;
     }
-
-
 }
-
 
 int main( void )
 {
     /* used to store text */
-    unsigned char inbuf[BUF_SIZE];
+    unsigned char inbuf[BUF_SIZE] = {0};
 
-    unsigned char outbuf[BUF_SIZE];
+    unsigned char outbuf[BUF_SIZE] = {0};
+    int keybuf[256] = {0};
     /* used to stroe text length, which return from readin func. */
     size_t n;
     /* used to store initial letter freq.*/
@@ -81,26 +82,36 @@ int main( void )
 
     n = readin_hexstr_from_file(stdin, inbuf, BUF_SIZE);
 
-    text_letter_freq(inbuf, n, freq, 256);
+    printf("%I64d: %s", n,inbuf);
+
+    letter_freq(inbuf, n, freq, 256);
 
 
     unsigned char tabref[256];
     for (size_t i = 0; i < 256; i++) tabref[i] = i;
 
-    insert_sort_ip(freq, 256, tabref);
+    insert_sort_ip_double(freq, 256, tabref);
 
     unsigned char key;
 
     for (size_t j = 0; j < 7; j++) {
     for (size_t i = 0; i < 6; i++) {
         key = tabref[j] ^ letter_frequency[i];
-        printf("%u: ", key);
-        for ( size_t k = 0; k < n; k++) {
-            outbuf[k] = inbuf[k] ^ key;
-            // if (!isprint(outbuf[k])) break;
-        }
-        printf("%s\n", outbuf);
+        keybuf[key]++;
     }}
+
+
+    for ( int i = 0; i < 256; i++) {
+        if (keybuf[i] < 2 ) continue;
+        else {
+            printf("%d: ", i);
+            for (size_t j = 0; j < BUF_SIZE; j++) {
+                if (inbuf[j])
+                outbuf[j] = inbuf[j] ^ i;
+            }
+            printf("%s\n", outbuf);
+        }
+    }
 
     return 0;
 

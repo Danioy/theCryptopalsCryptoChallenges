@@ -1,6 +1,7 @@
 #include "common.h"
 
 
+
 size_t
 readin_hexstr_from_file(FILE *fin, unsigned char *outbuf,
     const size_t buf_size)

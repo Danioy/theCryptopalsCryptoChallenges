@@ -49,7 +49,7 @@ cornell.edu 的 letter frequency 数据和分布:
 | J      | 188   |      | J      | 0.10           |
 | Z      | 128   |      | Z      | 0.07           |
 
-![img](E:\beyond\cryptochallenge\ch3\frequency.jpg)
+![img](frequency.jpg)
 
 经过第一题之后，应该很容易得到 题目中的 数字序列和 重复频率。
 
@@ -96,3 +96,26 @@ cornell.edu 的 letter frequency 数据和分布:
 
 
 不管如何，先把算法构建起来。
+
+实际计算做出来又有新发现。对于一级高频符组合测试之后，答案key 88 不止出现一次！！！！！
+
+这个特点很容易理解，但不试一试是永远想不到这点。好玩， 可以修改一下流程了。
+
+
+
+遇到好多 memory 方面的困难。 指针和数组传来传去，总是出问题。先解决到这个样子吧。 在后面的题目中逐步完善我们的函数。
+
+```
+$ echo 1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736 | ./single_xor.exe
+34: 7316?x+x413=x9x(7-6<x7>x:9;7680: Kggcafo(EK/{(dacm(i(xg}fl(gn(jikgf
+82: Ieeacdm*GI-y*fcao*k*zedn*el*hkied
+86: Maaeg`i.CM)}.bgek.o.~a{`j.ah.loma`
+87: L``dfah/BL(|/cfdj/n/`zak/`i/mnl`a
+88: Cooking MC's like a pound of bacon
+89: Bnnjhof!LB&r!mhjd!`!qntoe!ng!c`bno
+92: Gkkomjc$IG#w$hmoa$e$tkqj`$kb$fegkj
+94: Eiimoha&KE!u&jomc&g&vishb&i`&dgeih
+95: Dhhlni`'JD t'knlb'f'whric'ha'efdhi
+```
+
+暂时我是把重复出现两次及以上的key 都穷举了一下。应该有更简洁的办法的。 可惜俺的 coding 水平还需要磨练啊~~~~~~~~~~~ 
